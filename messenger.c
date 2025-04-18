@@ -19,8 +19,6 @@ void xor_encrypt_decrypt(char *data, size_t len, char key) {
     }
 }
 
-char petz[200];
-
 int main(int argc, char *argv[]) {
     struct sockaddr_in bleh;
     struct sockaddr_in blah;
@@ -28,25 +26,38 @@ int main(int argc, char *argv[]) {
     char buffer[4096];
     fd_set rset;
     static char sc[1500];
+
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <port>\n", argv[0]);
+        return 1;
+    }
+
     bzero(&bleh, sizeof(bleh));
     bleh.sin_family = AF_INET;
     bleh.sin_port = htons(atoi(argv[1]));
+    bleh.sin_addr.s_addr = INADDR_ANY;
 
     fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (fd < 0) {
+        perror("socket");
+        return 1;
+    }
+
     m = bind(fd, (struct sockaddr *)&bleh, sizeof(bleh));
-
-    printf("Waiting connection...");
-    fflush(stdout);
-
     if (m < 0) {
         perror("bind");
         return 1;
     }
+
     m = listen(fd, 5);
     if (m < 0) {
         perror("listen");
         return 1;
     }
+
+    printf("Waiting connection...\n");
+    fflush(stdout);
+
     ot = sizeof(blah);
     k = accept(fd, (struct sockaddr *)&blah, &ot);
     if (k <= 0) {
@@ -54,14 +65,16 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    printf("\nGotcha!\n");
+    printf("Gotcha!\n");
 
-    read(k, sc, sizeof(sc));
-    printf("Received: %s", sc);
+    // Получение первого сообщения
+    int bytes = read(k, sc, sizeof(sc));
+    if (bytes > 0) {
+        xor_encrypt_decrypt(sc, bytes, KEY);
+        write(STDOUT_FILENO, sc, bytes);
+    }
 
-    xor_encrypt_decrypt(sc, strlen(sc), KEY);
-    printf("Encrypted: %s", sc);
-
+    // Главный цикл обмена
     for (;;) {
         FD_ZERO(&rset);
         FD_SET(k, &rset);
@@ -69,7 +82,7 @@ int main(int argc, char *argv[]) {
 
         n = select(k + 1, &rset, NULL, NULL, NULL);
         if (n <= 0)
-            return (-1);
+            break;
 
         if (FD_ISSET(k, &rset)) {
             n = recv(k, buffer, sizeof(buffer), 0);
@@ -90,5 +103,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    close(k);
+    close(fd);
     return 0;
 }
