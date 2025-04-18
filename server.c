@@ -22,7 +22,8 @@ void xor_encrypt_decrypt(char *data, size_t len, char key) {
 int main(int argc, char *argv[]) {
     struct sockaddr_in bleh;
     struct sockaddr_in blah;
-    int fd, k, m, ot = 0, n = 0;
+    int fd, k, m, n = 0;
+    socklen_t ot = 0;
     char buffer[4096];
     fd_set rset;
     static char sc[1500];

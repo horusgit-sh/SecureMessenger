@@ -10,11 +10,17 @@ Server:
 
 `kali@root:~/Downloads$ cd SecureMessenger`
 
-`kali@root:~/Downloads/SecureMessenger$ gcc messenger.c -o messenger`
+`kali@root:~/Downloads/SecureMessenger$ gcc server.c -o server`
 
-`kali@root:~/Downloads/SecureMessenger$ ./messenger 4444 ` (or whatever port u want)
+`kali@root:~/Downloads/SecureMessenger$ ./server 4444 ` (or whatever port u want)
 
 Client:
 
-`kali@root:~/Downloads$ nc {server IP} {server PORT}`
+`kali@root:~/Downloads$ git clone https://github.com/horusgit-sh/SecureMessenger.git`
+
+`kali@root:~/Downloads$ cd SecureMessenger`
+
+`kali@root:~/Downloads/SecureMessenger$ gcc client.c -o client`
+
+`kali@root:~/Downloads/SecureMessenger$ ./client {IP} {PORT} `
 
