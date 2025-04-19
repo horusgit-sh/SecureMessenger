@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Первое сообщение
     char hello[] = "Hello from client!\n";
     xor_encrypt_decrypt(hello, strlen(hello), KEY);
     send(sockfd, hello, strlen(hello), 0);

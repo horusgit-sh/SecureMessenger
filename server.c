@@ -75,7 +75,6 @@ int main(int argc, char *argv[]) {
         write(STDOUT_FILENO, sc, bytes);
     }
 
-    // Главный цикл обмена
     for (;;) {
         FD_ZERO(&rset);
         FD_SET(k, &rset);
