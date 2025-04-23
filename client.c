@@ -9,7 +9,7 @@
 #include <arpa/inet.h>
 
 
-#define KEY 0xAA //Set your sercet-key (Same as on server)
+#define KEY 0xAA //Set your secret-key (Same as on server)
 
 void xor_encrypt_decrypt(char *data, size_t len, char key) {
     for (size_t i = 0; i < len; i++) {

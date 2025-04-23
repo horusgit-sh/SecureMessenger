@@ -11,7 +11,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
-#define KEY 0xAA //Set your sercet-key (Same as on client)
+#define KEY 0xAA //Set your secret-key (Same as on client)
 
 void xor_encrypt_decrypt(char *data, size_t len, char key) {
     for (size_t i = 0; i < len; i++) {
@@ -68,7 +68,6 @@ int main(int argc, char *argv[]) {
 
     printf("Gotcha!\n");
 
-    // Получение первого сообщения
     int bytes = read(k, sc, sizeof(sc));
     if (bytes > 0) {
         xor_encrypt_decrypt(sc, bytes, KEY);
